@@ -1,0 +1,458 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #333; 
+    font-family: 'Gowun Batang', serif;
+    overflow: auto; 
+}
+
+.postercontainer {
+    width: 1280px; 
+    height: 720px;
+    background-color: #000; 
+    position: relative;
+    overflow: hidden; 
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin: 50px 0; 
+    z-index: 0;
+}
+
+/* 호수 물결입니다 */
+.postercontainer::before {
+    content: ''; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('윤하 콘서트 원본3 - 복사본.jpg'); 
+    background-size: cover; 
+    background-position: center;
+    opacity: 1; 
+    z-index: 0; 
+    animation: 
+        subtleWaterMove 35s ease-in-out infinite alternate, 
+        waveDistort 10s ease-in-out infinite alternate; 
+}
+
+/* 밤 호수 입니다 */
+.postercontainer::after { 
+    content: ''; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('밤 호수.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0; 
+    z-index: 0; 
+    transition: opacity 2s ease-in-out; 
+}
+
+.postercontainer.showsecondimage::after {
+    opacity: 1;
+}
+
+
+/* 글자 스타일 */
+.text {
+    position: absolute;
+    color: white;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    transition: text-shadow 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.texttop {
+    top: 8%;
+    left: 5%;
+    transform: none; 
+    font-size: 1.7em;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.texttitle {
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    width: 100%;
+    opacity: 0; 
+}
+.texttitle h1 { 
+    font-size: 6em; 
+    margin: 0; 
+    font-weight: 300; 
+}
+.texttitle h2 { 
+    font-size: 2.2em; 
+    margin: 10px 0 0 0; 
+    font-weight: normal; 
+    letter-spacing: 1px; 
+}
+
+.textmd { 
+    top: 72%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    font-size: 1.6em;
+    font-weight: 700; 
+    letter-spacing: 4px; 
+    font-family: 'Noto Sans KR', sans-serif; 
+}
+
+.textdateanimated {
+    position: absolute;
+    bottom: 8%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    color: white;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    opacity: 0; 
+}
+
+/* 마우스 반짝이는 효과입니다 */
+.textglow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+.lighteffect {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 60%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+
+/* 밤호수 하늘입니다 */
+
+/* 별똥별 움직이기*/
+.postercontainer .starfallcontainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1; 
+    opacity: 0; 
+    transition: opacity 1s 1s ease-in-out;
+}
+.postercontainer.showsecondimage .starfallcontainer {
+    opacity: 1; 
+}
+.starfallcontainer .shootingstar {
+    position: absolute;
+    width: 3px; 
+    height: 3px;
+    border-radius: 50%;
+    background: #FFF;
+    box-shadow: 0 0 8px 1px #FFF;
+    opacity: 0;
+    transform: rotate(45deg);
+    animation: shoot 4s linear infinite;
+}
+.starfallcontainer .shootingstar::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 1px);
+    right: 3px;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.4), transparent);
+}
+.starfallcontainer .shootingstar:nth-child(1) {
+    top: -5%; 
+    left: 80%; 
+    animation-delay: 0s;
+    animation-duration: 4s;
+}
+.starfallcontainer .shootingstar:nth-child(2) {
+    top: 10%; 
+    left: 100%; 
+    animation-delay: 2s;
+    animation-duration: 3.5s;
+}
+
+/* 반짝이는 별입니다. */
+.twinklingstars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    box-shadow: 
+        100px 200px 1px #FFF, 300px 100px 1px #FFF, 500px 50px 1px #FFF,
+        700px 300px 1px #FFF, 900px 150px 1px #FFF, 1100px 250px 1px #FFF,
+        400px 400px 1px #FFF, 600px 500px 1px #FFF, 800px 600px 1px #FFF,
+        1000px 450px 1px #FFF;
+    opacity: 0; 
+    z-index: 1; 
+    pointer-events: none;
+    animation: twinkle 2s ease-in-out infinite alternate;
+}
+.twinklingstars2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    box-shadow: 
+        150px 50px 2px #FFF, 350px 250px 1px #FFF, 550px 150px 2px #FFF,
+        750px 400px 1px #FFF, 950px 50px 1px #FFF, 1150px 350px 2px #FFF,
+        450px 550px 1px #FFF, 650px 300px 1px #FFF, 850px 450px 2px #FFF,
+        1050px 600px 1px #FFF;
+    opacity: 0; 
+    z-index: 1; 
+    pointer-events: none;
+    animation: twinkle 3s ease-in-out infinite alternate;
+}
+.postercontainer.showsecondimage .twinklingstars,
+.postercontainer.showsecondimage .twinklingstars2 {
+    opacity: 1; 
+}
+
+/* 빛나고 움직이는 사람을 표현한 것입니다. */
+.glowingchild {
+    position: absolute;
+    width: 11.25px;
+    height: 18.75px;
+    background: radial-gradient(circle at top, rgba(255, 255, 200, 0.9) 0%, rgba(255, 255, 200, 0.5) 50%, rgba(255, 255, 200, 0) 100%);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0; 
+    box-shadow: 0 0 8px 2px rgba(255, 255, 200, 0.5), 
+                0 0 15px 3px rgba(255, 255, 200, 0.2); 
+    opacity: 0; 
+    z-index: 2; 
+    pointer-events: none;
+    bottom: 38%; 
+    left: 5%; 
+    animation: childWalk 30s linear infinite; 
+    animation-delay: 9s; 
+    transition: opacity 1s ease-in-out;
+}
+.postercontainer.showsecondimage .glowingchild {
+    opacity: 1; 
+}
+
+
+/* 엔딩 크레딧  */
+
+.endingscene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('지구.jpg'); 
+    background-size: cover;
+    background-position: center;
+    opacity: 0; 
+    z-index: -1; 
+    transition: opacity 2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+}
+.endingscene.show {
+    opacity: 1;
+    z-index: 10; 
+}
+
+.endingcredits {
+    color: white;
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 1.8;
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    width: 80%;
+    position: absolute; 
+    bottom: 0;
+    opacity: 0;
+    transform: translateY(100vh); 
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400; 
+}
+
+.endingcredits.startscroll {
+    opacity: 1;
+    animation: creditsScroll 30s ease-out forwards;
+}
+
+.endingcredits h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+/* 안내 사항 버튼 */
+.ctabutton {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 25px;
+    border: 2px solid white;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.ctabutton:hover {
+    background-color: white;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+/* 마지막 초대장 이미지  */
+.finalimagescene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: url('콘스터 초대장1-1.jpg'); 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-color: black; 
+    background-position: center;
+    opacity: 0; 
+    z-index: -1; 
+    pointer-events: none; 
+    transition: opacity 1.5s ease-in-out; 
+}
+.finalimagescene.show {
+    opacity: 1;
+    z-index: 20; 
+    pointer-events: auto; 
+}
+
+/* 물결 배경 */
+@keyframes subtleWaterMove {
+    from { 
+        background-position: 50% 50%;
+        filter: blur(0px) contrast(100%); 
+    }
+    to { 
+        background-position: 51% 49%;
+        filter: blur(0.5px) contrast(110%); 
+    }
+}
+@keyframes waveDistort {
+    from { transform: scale(1) skew(0deg, 0deg); } 
+    50% { transform: scale(1.02) skew(-1deg, 0.5deg); } 
+    to { transform: scale(1) skew(0deg, 0deg); } 
+}
+
+@keyframes fadeInTitle {
+    from { opacity: 0; transform: translate(-50%, -55%); } 
+    to   { opacity: 1; transform: translate(-50%, -50%); } 
+}
+
+.fadeintitle {
+    animation: fadeInTitle 2.5s ease-out forwards;
+}
+
+
+@keyframes slideAcross {
+    0%   { opacity: 0; transform: translateX(-100%); } 
+    10%  { opacity: 1; } 
+    90%  { opacity: 1; } 
+    100% { opacity: 0; transform: translateX(100%); } 
+}
+
+.startslideanimation {
+    animation: slideAcross 20s linear 1; 
+    animation-fill-mode: forwards; 
+}
+
+
+/* 별똥별 */
+@keyframes shoot {
+    0% {
+        transform: rotate(45deg) translateX(0); 
+        opacity: 0;
+    }
+    10% { opacity: 1; } 
+    80% { opacity: 1; } 
+    100% {
+        transform: rotate(45deg) translateX(800px); 
+        opacity: 0;
+    }
+}
+
+/* 반짝이는 별 */
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* 빛나고 움직이는 사람 형상  */
+@keyframes childWalk {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+    20% { transform: translate(87px, -1px) scale(0.95); opacity: 1; }   
+    40% { transform: translate(174px, 0px) scale(1.02); opacity: 0.9; } 
+    60% { transform: translate(261px, -1px) scale(0.98); opacity: 1; } 
+    80% { transform: translate(348px, 0px) scale(1.05); opacity: 1; } 
+    100% { transform: translate(435px, 0) scale(1); opacity: 1; }
+}
+
+/* 엔딩 크레딧 스크롤 입니다 */
+@keyframes creditsScroll {
+    0%   { transform: translateY(100vh); } 
+    100% { transform: translateY(-50vh); } 
+}
+
+/* 엔딩 크레딧 한 줄씩 등장입니다 */
+@keyframes fadeInLine {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+.endingcredits.startscroll > p,
+.endingcredits.startscroll > h1,
+.endingcredits.startscroll > .ctabutton {
+    opacity: 0; 
+    animation: fadeInLine 1.5s ease-out forwards; 
+}
+
+/* 각 줄에 순차적으로 나오게함 각각의 초 설정 */
+.endingcredits.startscroll > p:nth-of-type(1)  { animation-delay: 0.5s; }
+.endingcredits.startscroll > p:nth-of-type(2)  { animation-delay: 1.2s; }
+.endingcredits.startscroll > p:nth-of-type(3)  { animation-delay: 3.0s; }
+.endingcredits.startscroll > p:nth-of-type(4)  { animation-delay: 3.7s; }
+.endingcredits.startscroll > p:nth-of-type(5)  { animation-delay: 4.4s; }
+.endingcredits.startscroll > p:nth-of-type(6)  { animation-delay: 5.1s; }
+.endingcredits.startscroll > p:nth-of-type(7)  { animation-delay: 5.8s; }
+.endingcredits.startscroll > p:nth-of-type(8)  { animation-delay: 8.0s; }
+.endingcredits.startscroll > p:nth-of-type(9)  { animation-delay: 8.7s; }
+.endingcredits.startscroll > p:nth-of-type(10) { animation-delay: 9.4s; }
+.endingcredits.startscroll > h1:nth-of-type(1) { animation-delay: 15.0s; }
+.endingcredits.startscroll > .ctabutton      { animation-delay: 15.5s; }
